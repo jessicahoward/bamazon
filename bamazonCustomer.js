@@ -2,11 +2,10 @@
 var Table = require('cli-table');
 //require inquirer
 var inquirer = require("inquirer");
-//require mysql
-var mysql = require("mysql");
 //require colors
 var colors = require("colors");
-// console.log('hello'.green);
+//require mysql
+var mysql = require("mysql");
 //configure sqlconnection
 var connection = mysql.createConnection({
   host: "localhost",
@@ -18,27 +17,22 @@ var connection = mysql.createConnection({
 //on connection
 connection.connect(function(err) {
   if (err) throw err;
-//   console.log("connected as id " + connection.threadId);
-//   afterConnection();
     displayProducts();
 });
- 
 //create cli-table
 var table = new Table({
-    head: ['Product ID', 'Product Name', 'Department', 'Price', 'Stock']
-//   
+    head: ['Product ID', 
+    'Product Name', 
+    'Department', 
+    'Price', 
+    'Stock']  
 });
 //global variables accessable to all functions
   var id;
   var numberOf;
   var total;
   var cost;
-//   var dbId;
-//   var dbName;
-//   var dbDept;
-//   var dbPrice;
   var dbQuantity;
-// 
 //query database 
 function displayProducts () {
     connection.query("SELECT * FROM products", function(err, res) {
@@ -52,9 +46,9 @@ function displayProducts () {
             //push res into cli-table
             table.push([dbId, dbName, dbDept, dbPrice, dbQuantity])
         };
-        //display cli-table
+//display cli-table
         console.log(table.toString());
-        //prompt user for input
+//prompt user for input
         inquirer
   .prompt([
     {
@@ -65,27 +59,25 @@ function displayProducts () {
     {
         type: "input",
         name: "quantity",
-        message: "Please enter the quanitity you would like to purchase?" 
+        message: "Please enter the quanitity you would like to purchase?"
     }
   ]).then(function(answer){
-      //reassign variables depending on user response
+//reassign variables depending on user response
       id = answer.id;
       numberOf = parseInt(answer.quantity);
-      checkStock();
-    // console.log(id);
-    // console.log(numberOf);
-    // console.log(id + numberOf);    
+      checkStock();    
   })   
     })
-    //end of display products
+//end of display products
 }
 
 
 function checkStock () {
+//do you have the stock?
     if (numberOf > parseInt(dbQuantity)) {
-            console.log("Your order exceeds current stock quantity");
-                    connection.end();
-
+            console.log("Your order exceeds current stock quantity".red);
+            connection.end();
+//if yes, complete the order
         } else {
             connection.query("SELECT * FROM products WHERE item_id= ?", [id], function(err, res) {
                 if (err) throw err;
@@ -102,8 +94,7 @@ function checkStock () {
                 updateTable();
             })
         }
-        // connection.end();
-      //end of check stock
+//end of check stock
 }
 
 // update remaining quantity on db
@@ -116,13 +107,10 @@ function updateTable () {
         {
             item_id: id
         }
-
     ], function (err, res) {
         if (err) throw err;
       });
-    connection.end();  
+    connection.end(); 
+//end of update table 
 }
-
-
-            //show total cost of purchase
 //move on to step two
