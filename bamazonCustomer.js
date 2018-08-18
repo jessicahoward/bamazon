@@ -84,7 +84,8 @@ function displayProducts () {
 function checkStock () {
     if (numberOf > parseInt(dbQuantity)) {
             console.log("Your order exceeds current stock quantity");
-            displayProducts();
+                    connection.end();
+
         } else {
             connection.query("SELECT * FROM products WHERE item_id= ?", [id], function(err, res) {
                 if (err) throw err;
@@ -94,32 +95,34 @@ function checkStock () {
                 console.log("You have purchased " + 
                 numberOf + 
                 " " + 
-                resProduct + 
+                resProduct.product_name + 
                 " for a total price of $" 
                 + cost 
                 + ".");
+                updateTable();
             })
         }
-      connection.end();  
+        // connection.end();
       //end of check stock
 }
 
-// function updateTable () {
+// update remaining quantity on db
+function updateTable () {
+    connection.query("UPDATE products SET ? WHERE ?", 
+    [
+        {
+          stock_quantity: total  
+        },
+        {
+            item_id: id
+        }
 
-// }
+    ], function (err, res) {
+        if (err) throw err;
+      });
+    connection.end();  
+}
 
 
-// function checkStock () {
-//     connection.query("SELECT * FROM products WHERE id = ?", [id], function (err, res) {
-//         if (err) throw err;
-//         console.log(res);
-//     })
-    
-// }
-
-// 
-
-        //if yes fufill order
-            //update remaining quantity
             //show total cost of purchase
 //move on to step two
