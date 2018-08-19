@@ -1,21 +1,3 @@
-// ### Challenge #2: Manager View (Next Level)
-
-// * Create a new Node application called `bamazonManager.js`. Running this application will:
-
-//   * List a set of menu options:
-
-//     * View Products for Sale
-    
-//     * View Low Inventory
-    
-//     * Add to Inventory
-    
-//     * Add New Product
-
-//   * If a manager selects `View Products for Sale`, the app should list every available item: the item IDs, names, prices, and quantities.
-
-//   * If a manager selects `View Low Inventory`, then it should list all items with an inventory count lower than five.
-
 //   * If a manager selects `Add to Inventory`, your app should display a prompt that will let the manager "add more" of any item currently in the store.
 
 //   * If a manager selects `Add New Product`, it should allow the manager to add a completely new product to the store.
@@ -50,11 +32,16 @@ connection.connect(function(err) {
 
 var table = new Table({
     head: ['Product ID', 
-    'Product Name', 
-    'Department', 
+    'Product Name',  
     'Price', 
     'Stock']  
 });
+//global variables
+var dbId;
+var dbName;
+var dbPrice;
+var dbQuantity;
+var increase;
 
 function promptManager () {
     inquirer.
@@ -68,22 +55,33 @@ function promptManager () {
                 name: "tasks"    
             }
         ]).then(function(answer){
-
-            switch(answer) {
+            switch(answer.tasks) {
                 case "View Products for Sale":
+                    console.log(answer.tasks.green);
                     viewProd();
+                    connection.end();
                     break;
+
                 case "View Low Inventory":
+                    console.log(answer.tasks.green);
                     viewLow();
+                    connection.end();
                     break;
+
                 case "Add to Inventory":
-                    viewLow();
+                    console.log(answer.tasks.green);
+                    addStock();
+                    connection.end();
                     break;
+
                 case "Add New Product":
+                    console.log(answer.tasks.green);
                     viewLow();
+                    connection.end();
                     break;
 
                 default:
+                    console.log("Goodbye, Manager".red);
                     connection.end();
             }
             
@@ -91,13 +89,13 @@ function promptManager () {
 //end of prompt manager
 }
 
-// function viewProd () {
+function viewProd () {
     connection.query("SELECT * FROM products", function(err, res) {
         if (err) throw err;
         for (var i = 0; i < res.length; i++) {
-            var dbId = res[i].item_id;
-            var dbName = res[i].product_name;
-            var dbPrice = res[i].price;
+            dbId = res[i].item_id;
+            dbName = res[i].product_name;
+            dbPrice = res[i].price;
             dbQuantity = res[i].stock_quantity;
             //push res into cli-table
             table.push([dbId, dbName, dbPrice, dbQuantity])
@@ -105,113 +103,64 @@ function promptManager () {
 //display cli-table
         console.log(table.toString());
     })
-// //end of viewProd
-// }
+//end of viewProd
+}
 
-// function viewLow () {
-// //end of viewLow
-// }
+function viewLow () {
+    connection.query("SELECT * FROM products WHERE stock_quantity < 6", function(err, res) {
+        if (err) throw err;
 
-// function addStock () {
-// //end of addStock
-// }
+        for (var i = 0; i < res.length; i++) {
+            dbId = res[i].item_id;
+            dbName = res[i].product_name;
+            dbPrice = res[i].price;
+            dbQuantity = res[i].stock_quantity;
+            //push res into cli-table
+            table.push([dbId, dbName, dbPrice, dbQuantity])
+        };
+//display cli-table
+        console.log(table.toString());
+    })
+//end of viewLow
+}
+
+function addStock () {
+    inquirer.
+        prompt([
+            {
+                type: "input",
+                message: "Pease enter the ID for the item you would like to add inventory to.",
+                name: "id"    
+            },
+            {
+                type: "input",
+                message: "How many would you like to add to the inventory?",
+                name: "increase"    
+            }
+        ]).then(function(answer){
+            console.log(answer.id);
+            console.log(answer.increase);
+            increase = dbQuantity + parseInt(answer.increase);
+            console.log(increase);
+            connection.query("UPDATE products SET ? WHERE ?", 
+    [
+        {
+          stock_quantity: increase  
+        },
+        {
+            item_id: answer.id
+        }
+    ], function (err, res) {
+        if (err) throw err;
+      });
+        })
+        
+//end of addStock
+}
+
+
+
 
 // function addProd () {
 // //end of addProd
 // }
-
-// //create cli-table
-// var table = new Table({
-//     head: ['Product ID', 
-//     'Product Name', 
-//     'Department', 
-//     'Price', 
-//     'Stock']  
-// });
-// //global variables accessable to all functions
-//   var id;
-//   var numberOf;
-//   var total;
-//   var cost;
-//   var dbQuantity;
-// //query database 
-// function displayProducts () {
-//     connection.query("SELECT * FROM products", function(err, res) {
-//         if (err) throw err;
-//         for (var i = 0; i < res.length; i++) {
-//             var dbId = res[i].item_id;
-//             var dbName = res[i].product_name;
-//             var dbDept = res[i].department_name;
-//             var dbPrice = res[i].price;
-//             dbQuantity = res[i].stock_quantity;
-//             //push res into cli-table
-//             table.push([dbId, dbName, dbDept, dbPrice, dbQuantity])
-//         };
-// //display cli-table
-//         console.log(table.toString());
-// //prompt user for input
-//         inquirer
-//   .prompt([
-//     {
-//         type: "input",
-//         name: "id",
-//         message: "Please enter the ID of the product you would like to purchase?"
-//     },
-//     {
-//         type: "input",
-//         name: "quantity",
-//         message: "Please enter the quanitity you would like to purchase?" 
-//     }
-//   ]).then(function(answer){
-// //reassign variables depending on user response
-//       id = answer.id;
-//       numberOf = parseInt(answer.quantity);
-//       checkStock();    
-//   })   
-//     })
-// //end of display products
-// }
-
-
-// function checkStock () {
-// //do you have the stock?
-//     if (numberOf > parseInt(dbQuantity)) {
-//             console.log("Your order exceeds current stock quantity");
-//             connection.end();
-// //if yes, complete the order
-//         } else {
-//             connection.query("SELECT * FROM products WHERE item_id= ?", [id], function(err, res) {
-//                 if (err) throw err;
-//                 var resProduct = res[0];
-//                 total = parseInt(resProduct.stock_quantity) - numberOf;
-//                 cost = parseFloat(parseFloat(resProduct.price) * numberOf).toFixed(2);
-//                 console.log("You have purchased " + 
-//                 numberOf + 
-//                 " " + 
-//                 resProduct.product_name + 
-//                 " for a total price of $" 
-//                 + cost 
-//                 + ".");
-//                 updateTable();
-//             })
-//         }
-// //end of check stock
-// }
-
-// // update remaining quantity on db
-// function updateTable () {
-//     connection.query("UPDATE products SET ? WHERE ?", 
-//     [
-//         {
-//           stock_quantity: total  
-//         },
-//         {
-//             item_id: id
-//         }
-//     ], function (err, res) {
-//         if (err) throw err;
-//       });
-//     connection.end(); 
-// //end of update table 
-// }
-// //move on to step two
