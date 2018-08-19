@@ -13,7 +13,7 @@ stock_quantity INT (10) NOT NULL
 );
 
 ALTER TABLE products
-ADD COLUMN product_sales DECIMAL(10,2);
+ADD COLUMN product_sales DECIMAL(10,2) NOT NULL DEFAULT 0.00;
 
 --for departments table
 CREATE TABLE departments (

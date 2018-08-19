@@ -33,6 +33,7 @@ var table = new Table({
   var total;
   var cost;
   var dbQuantity;
+  var sales = 0;
 //query database 
 function displayProducts () {
     connection.query("SELECT * FROM products", function(err, res) {
@@ -82,8 +83,10 @@ function checkStock () {
             connection.query("SELECT * FROM products WHERE item_id= ?", [id], function(err, res) {
                 if (err) throw err;
                 var resProduct = res[0];
+                
                 total = parseInt(resProduct.stock_quantity) - numberOf;
                 cost = parseFloat(parseFloat(resProduct.price) * numberOf).toFixed(2);
+                sales = parseFloat(parseFloat(resProduct.product_sales) + parseFloat(cost)).toFixed(2);
                 console.log("You have purchased " + 
                 numberOf + 
                 " " + 
@@ -91,6 +94,9 @@ function checkStock () {
                 " for a total price of $" 
                 + cost 
                 + ".");
+                console.log(resProduct.product_sales);
+                console.log(cost);
+                console.log(sales);
                 updateTable();
             })
         }
@@ -102,7 +108,8 @@ function updateTable () {
     connection.query("UPDATE products SET ? WHERE ?", 
     [
         {
-          stock_quantity: total  
+          stock_quantity: total, 
+          product_sales: sales
         },
         {
             item_id: id

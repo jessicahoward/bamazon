@@ -16,7 +16,7 @@ INSERT INTO products (product_name, department_name, price, stock_quantity)
 VALUES ("UFO Hexacopter", "Toys", 90.99, 90);
 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
-VALUES ("Bad People", "Toys", 39.95, 1000);
+VALUES ("Bad People", "Toys", 39.95, 100);
 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
 VALUES ("PO MAN Charcoal Grill", "Home & Garden", 145.00, 17);
