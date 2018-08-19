@@ -57,27 +57,23 @@ function promptManager () {
         ]).then(function(answer){
             switch(answer.tasks) {
                 case "View Products for Sale":
-                    console.log(answer.tasks.green);
+                    console.log("All Products for Sale".green);
                     viewProd();
-                    connection.end();
                     break;
 
                 case "View Low Inventory":
-                    console.log(answer.tasks.green);
+                    console.log("All Inventory Under 5".green);
                     viewLow();
-                    connection.end();
                     break;
 
                 case "Add to Inventory":
-                    console.log(answer.tasks.green);
+                    console.log("Add to Item Inventory".green);
                     addStock();
-                    connection.end();
                     break;
 
                 case "Add New Product":
-                    console.log(answer.tasks.green);
-                    viewLow();
-                    connection.end();
+                    console.log("Add New Products".green);
+                    addProd();
                     break;
 
                 default:
@@ -102,6 +98,7 @@ function viewProd () {
         };
 //display cli-table
         console.log(table.toString());
+        promptManager();
     })
 //end of viewProd
 }
@@ -120,6 +117,7 @@ function viewLow () {
         };
 //display cli-table
         console.log(table.toString());
+        promptManager();
     })
 //end of viewLow
 }
@@ -155,12 +153,50 @@ function addStock () {
       });
         })
         
-//end of addStock
+// //end of addStock
 }
 
 
 
-
-// function addProd () {
-// //end of addProd
-// }
+function addProd () {
+    inquirer.
+        prompt([
+            {
+                type: "input",
+                message: "What is the Department Name for the item you are adding?",
+                name: "dept"    
+            },
+            {
+                type: "input",
+                message: "What is the Product Name for the item you are adding?",
+                name: "name"    
+            },
+            {
+                type: "input",
+                message: "What is the Price for the item you are adding?",
+                name: "price"
+            },
+            {
+                type: "input",
+                message: "How many would you like to add to stock?",
+                name: "quantity"
+            }
+        ]).then(function(answer){
+            console.log(answer.dept);
+            console.log(answer.name);
+            console.log(answer.price);
+            console.log(answer.quantity);
+            connection.query( "INSERT INTO products SET ?",
+            {
+              product_name: answer.name,
+              department_name: answer.dept,
+              price: parseFloat(answer.price).toFixed(2),
+              stock_quantity: answer.quantity
+            }, function (err, res) {
+        if (err) throw err;
+        console.log("New Product has been added!".blue);
+        promptManager();
+      });
+        })
+//end of addProd
+}
