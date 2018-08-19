@@ -1,12 +1,4 @@
 //   * If a manager selects `Add to Inventory`, your app should display a prompt that will let the manager "add more" of any item currently in the store.
-
-//   * If a manager selects `Add New Product`, it should allow the manager to add a completely new product to the store.
-
-// - - -
-
-// * If you finished Challenge #2 and put in all the hours you were willing to spend on this activity, then rest easy! Otherwise continue to the next and final challenge.
-
-// - - -
 //require table
 var Table = require('cli-table');
 //require inquirer
@@ -122,41 +114,45 @@ function viewLow () {
 //end of viewLow
 }
 
-function addStock () {
-    inquirer.
-        prompt([
-            {
-                type: "input",
-                message: "Pease enter the ID for the item you would like to add inventory to.",
-                name: "id"    
-            },
-            {
-                type: "input",
-                message: "How many would you like to add to the inventory?",
-                name: "increase"    
-            }
-        ]).then(function(answer){
-            console.log(answer.id);
-            console.log(answer.increase);
-            increase = dbQuantity + parseInt(answer.increase);
-            console.log(increase);
-            connection.query("UPDATE products SET ? WHERE ?", 
-    [
-        {
-          stock_quantity: increase  
-        },
-        {
-            item_id: answer.id
-        }
-    ], function (err, res) {
-        if (err) throw err;
-      });
-        })
+// function addStock () {
+//     inquirer.
+//         prompt([
+//             {
+//                 type: "input",
+//                 message: "Pease enter the ID for the item you would like to add inventory to.",
+//                 name: "id"    
+//             },
+//             {
+//                 type: "input",
+//                 message: "How many would you like to add to the inventory?",
+//                 name: "increase"    
+//             }
+//         ]).then(function(answer){
+//             increase = answer.increase;
+//             console.log(answer.id);
+//             console.log(answer.increase);
+//             connection.query("SELECT stock_quantity FROM products WHERE item_id = ?", [answer.id], function(err, res){
+//                 if (err) throw err;
+//                 var stock = res[0].stock_quantity;
+//                 var newInv = parseInt(stock += increase);
+//                 console.log(newInv);
+//                          connection.query("UPDATE products SET ? WHERE ?", 
+//     [
+//         {
+//           stock_quantity: newInv  
+//         },
+//         {
+//             item_id: answer.id
+//         }
+//     ], function (err, res) {
+//         if (err) throw err;
+//       });
+//             })
+   
+//         })
         
-// //end of addStock
-}
-
-
+// // //end of addStock
+// }
 
 function addProd () {
     inquirer.
