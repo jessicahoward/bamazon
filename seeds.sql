@@ -1,29 +1,50 @@
-INSERT INTO products (product_name, department_name, price, stock_quantity)
-VALUES ("The Stranger Beside Me", "Books", 29.99, 25);
+--for products table
 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
-VALUES ("Red Dragon", "Books", 19.99, 50);
+VALUES ("Survive the Night", "Books", 5.62, 25);
 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
-VALUES ("Deep Blue Sea", "Movies", 9.99, 6);
+VALUES ("One of Us is Lying", "Books", 12.52, 50);
 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
-VALUES ("The Night Manager", "Movies", 999.99, 7);
+VALUES ("Darkest Hour", "Movies", 9.99, 6);
 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
-VALUES ("DASH", "Toys", 119.99, 90);
+VALUES ("Phantom Thread", "Movies", 14.99, 7);
 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
-VALUES ("Skate Board", "Toys", 79.99, 1000);
+VALUES ("UFO Hexacopter", "Toys", 90.99, 90);
 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
-VALUES ("Bubble Lips", "Cosmetics", 12.99, 17);
+VALUES ("Bad People", "Toys", 39.95, 1000);
 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
-VALUES ("Transmission Fluid", "Auto Repair", 49.99, 10);
+VALUES ("PO MAN Charcoal Grill", "Home & Garden", 145.00, 17);
 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
-VALUES ("Teepee Tent", "Outdoors", 76.99, 23);
+VALUES ("Royal Gourmet Gas Griddle", "Home & Garden", 105.99, 10);
 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
-VALUES ("Camping Stove", "Outdoors", 29.99, 76);
+VALUES ("Canvas Flexbow 4 Person Tent", "Outdoors", 615.97, 23);
+
+INSERT INTO products (product_name, department_name, price, stock_quantity)
+VALUES ("Zenph Automatic 4 Person Tent", "Outdoors", 79.99, 76);
+
+--for departments table
+
+
+INSERT INTO departments (department_name, overhead_cost)
+VALUES ("Books", 3000.00);
+
+INSERT INTO departments (department_name, overhead_cost)
+VALUES ("Movies", 15000.00);
+
+INSERT INTO departments (department_name, overhead_cost)
+VALUES ("Toys", 6000.00);
+
+INSERT INTO departments (department_name, overhead_cost)
+VALUES ("Home & Garden", 10000.00);
+
+INSERT INTO departments (department_name, overhead_cost)
+VALUES ("Outdoors", 20000.00);
+

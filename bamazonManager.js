@@ -4,7 +4,7 @@ var Table = require('cli-table');
 //require inquirer
 var inquirer = require("inquirer");
 //require colors
-var colors = require("colors")
+var colors = require("colors");
 //require mysql
 var mysql = require("mysql");
 //configure sqlconnection
@@ -34,6 +34,8 @@ var dbName;
 var dbPrice;
 var dbQuantity;
 var increase;
+var stock;
+var newInv;
 
 function promptManager () {
     inquirer.
@@ -90,7 +92,7 @@ function viewProd () {
         };
 //display cli-table
         console.log(table.toString());
-        promptManager();
+        connection.end();
     })
 //end of viewProd
 }
@@ -109,50 +111,50 @@ function viewLow () {
         };
 //display cli-table
         console.log(table.toString());
-        promptManager();
+        connection.end();
+
     })
 //end of viewLow
 }
 
-// function addStock () {
-//     inquirer.
-//         prompt([
-//             {
-//                 type: "input",
-//                 message: "Pease enter the ID for the item you would like to add inventory to.",
-//                 name: "id"    
-//             },
-//             {
-//                 type: "input",
-//                 message: "How many would you like to add to the inventory?",
-//                 name: "increase"    
-//             }
-//         ]).then(function(answer){
-//             increase = answer.increase;
-//             console.log(answer.id);
-//             console.log(answer.increase);
-//             connection.query("SELECT stock_quantity FROM products WHERE item_id = ?", [answer.id], function(err, res){
-//                 if (err) throw err;
-//                 var stock = res[0].stock_quantity;
-//                 var newInv = parseInt(stock += increase);
-//                 console.log(newInv);
-//                          connection.query("UPDATE products SET ? WHERE ?", 
-//     [
-//         {
-//           stock_quantity: newInv  
-//         },
-//         {
-//             item_id: answer.id
-//         }
-//     ], function (err, res) {
-//         if (err) throw err;
-//       });
-//             })
-   
-//         })
+function addStock () {
+    inquirer.
+        prompt([
+            {
+                type: "input",
+                message: "Pease enter the ID for the item you would like to add inventory to.",
+                name: "id"    
+            },
+            {
+                type: "input",
+                message: "How many would you like to add to the inventory?",
+                name: "increase"    
+            }
+        ]).then(function(answer){
+            increase = parseInt(answer.increase);
+            connection.query("SELECT stock_quantity FROM products WHERE item_id = ?", [answer.id], function(err, res){
+                if (err) throw err;
+                stock = parseInt(res[0].stock_quantity);
+                newInv = parseInt(stock + increase);
+                         connection.query("UPDATE products SET ? WHERE ?", 
+    [
+        {
+          stock_quantity: newInv  
+        },
+        {
+            item_id: answer.id
+        }
+    ], function (err, res) {
+        if (err) throw err;
+      });
+      connection.end();
+            })
+            
+
+        })
         
-// // //end of addStock
-// }
+// //end of addStock
+}
 
 function addProd () {
     inquirer.
@@ -193,6 +195,7 @@ function addProd () {
         console.log("New Product has been added!".blue);
         promptManager();
       });
+
         })
 //end of addProd
 }
