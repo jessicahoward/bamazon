@@ -1,4 +1,3 @@
-//   * If a manager selects `Add to Inventory`, your app should display a prompt that will let the manager "add more" of any item currently in the store.
 //require table
 var Table = require('cli-table');
 //require inquirer
@@ -193,9 +192,10 @@ function addProd () {
             }, function (err, res) {
         if (err) throw err;
         console.log("New Product has been added!".blue);
-        promptManager();
+        
       });
-
+        connection.end();
         })
 //end of addProd
 }
+
