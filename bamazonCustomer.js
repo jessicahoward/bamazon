@@ -87,16 +87,13 @@ function checkStock () {
                 total = parseInt(resProduct.stock_quantity) - numberOf;
                 cost = parseFloat(parseFloat(resProduct.price) * numberOf).toFixed(2);
                 sales = parseFloat(parseFloat(resProduct.product_sales) + parseFloat(cost)).toFixed(2);
-                console.log("You have purchased " + 
+                console.log("Thank you. You have purchased " + 
                 numberOf + 
                 " " + 
                 resProduct.product_name + 
                 " for a total price of $" 
                 + cost 
-                + ".");
-                console.log(resProduct.product_sales);
-                console.log(cost);
-                console.log(sales);
+                + ". Come Back Soon!");
                 updateTable();
             })
         }
