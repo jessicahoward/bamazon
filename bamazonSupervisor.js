@@ -43,13 +43,14 @@ connection.connect(function(err) {
 var table = new Table({
     head: ['Department ID', 
     'Department Name',  
-    'Overhead Costs']  
+    'Overhead Costs',
+'Total Sales']  
 });
 //global variables
 var deptId;
 var deptName;
 var deptCost;
-// deptSales;
+var deptSales;
 // 3. Create another Node app called `bamazonSupervisor.js`. Running this application will list a set of menu options:
 
 //    * View Product Sales by Department
@@ -85,15 +86,17 @@ function promptSuper () {
 }
 
 function viewSales () {
-    connection.query("SELECT * FROM departments", function(err, res) {
+    connection.query("SELECT departments.department_id, departments.department_name, departments.overhead_cost, products.product_sales FROM departments INNER JOIN products ON departments.department_name = products.department_name",
+     function(err, res) {
         if (err) throw err;
         for (var i = 0; i < res.length; i++) {
             deptId = res[i].department_id;
             deptName = res[i].department_name;
             deptCost = res[i].overhead_cost;
-            // deptSales = res[i].stock_quantity;
+            deptSales = res[i].product_sales;
             //push res into cli-table
-            table.push([deptId, deptName, deptCost])
+            table.push([deptId, deptName, deptCost, deptSales]);
+            
         };
 //display cli-table
         console.log(table.toString());
